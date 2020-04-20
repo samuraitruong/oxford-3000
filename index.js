@@ -48,9 +48,10 @@ async function main() {
   results.forEach((arr) => {
     finalResults = finalResults.concat(arr);
   });
+  finalResults.sort();
   // const set = new Set(finalResults);
   console.log("finalResults", finalResults);
-  fs.writeJSONSync("oxford-3000.json", finalResults);
+  fs.writeJSONSync("oxford-3000.json", finalResults, { spaces: 4 });
 }
 
 main();
