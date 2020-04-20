@@ -1,0 +1,26 @@
+{
+  "name": "oxford-3000",
+  "version": "1.0.0",
+  "description": "The json data of list 3000 words - https://www.oxfordlearnersdictionaries.com/wordlist/american_english/oxford3000/",
+  "main": "index.js",
+  "dependencies": {},
+  "type": "module",
+  "devDependencies": {
+    "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
+    "fs-extra": "^9.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samuraitruong/oxford-3000.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samuraitruong/oxford-3000/issues"
+  },
+  "homepage": "https://github.com/samuraitruong/oxford-3000#readme"
+}
