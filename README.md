@@ -6,5 +6,5 @@ The json data of list 3000 words - https://www.oxfordlearnersdictionaries.com/wo
 
 ```
 npm install
-node index.js
+node src/index.js
 ```

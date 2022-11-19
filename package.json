@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "The json data of list 3000 words - https://www.oxfordlearnersdictionaries.com/wordlist/american_english/oxford3000/",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "tiny-async-pool": "^2.1.0"
+  },
   "type": "module",
   "devDependencies": {
     "axios": "^0.21.1",
