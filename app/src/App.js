@@ -2,11 +2,22 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import { Container, Slider, Typography, Grid, Box } from "@mui/material";
+import CampaignIcon from "@mui/icons-material/Campaign";
+
+import {
+  Container,
+  Slider,
+  Typography,
+  Grid,
+  List,
+  Box,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 
 function App() {
   const [level, setLevel] = useState(6);
-  const [interval, setIntervalId] = useState(undefined);
 
   const [started, setStarted] = useState(false);
   const [total, setTotal] = useState(20);
@@ -16,6 +27,7 @@ function App() {
   const [playedWords, setPlayedWord] = useState([]);
 
   useEffect(() => {
+    console.log("Use Effect");
     if (!data) {
       fetch(
         "https://raw.githubusercontent.com/samuraitruong/oxford-3000/master/data/oxford-5000.json"
@@ -26,41 +38,41 @@ function App() {
           setData(wordsFilters);
         });
     }
-  }, [data, level]);
-
-  const startInterval = (d) => {
-    setStarted(true);
-    const playSound = (sound) => {
-      new Audio(
-        `https://raw.githubusercontent.com/samuraitruong/oxford-3000/master/data/media/${sound}`
-      ).play();
-    };
-
-    const playWord = () => {
-      const index = Math.floor(Math.random() * d.length);
-      const newWord = d[index];
-      const sounds = [...newWord.sound.uk, ...newWord.sound.us].map((x) =>
-        x.split("/").pop()
-      );
-      console.log("[...playedWords, newWord]", [...playedWords, newWord]);
-      setPlayedWord([...playedWords, newWord]);
-      setWord(newWord);
-      for (let i = 0; i < sounds.length; i++) {
-        setTimeout(
-          () => playSound(sounds[i]),
-          (delay / sounds.length) * i * 1000
+    console.log("started me", started, playedWords);
+    if (started) {
+      const playSound = (sound) => {
+        new Audio(
+          `https://raw.githubusercontent.com/samuraitruong/oxford-3000/master/data/media/${sound}`
+        ).play();
+      };
+      console.log("play word");
+      const playWord = () => {
+        const index = Math.floor(Math.random() * data.length);
+        const newWord = data[index];
+        const sounds = [...newWord.sound.uk, ...newWord.sound.us].map((x) =>
+          x.split("/").pop()
         );
-      }
-      console.log(playedWords, total);
-      if (playedWords.length > total) {
-        // Stop interval
-        clearInterval(interval);
-        setStarted(false);
-      }
-    };
-    playWord();
-    setIntervalId(setInterval(playWord, delay * 1000));
-  };
+        setWord(newWord);
+        setTimeout(() => {
+          console.log(playedWords, total);
+          const list = [...playedWords, newWord];
+          if (list.length > total) {
+            setStarted(false);
+          }
+
+          setPlayedWord(list);
+        }, delay * 1000);
+
+        for (let i = 0; i < sounds.length; i++) {
+          setTimeout(
+            () => playSound(sounds[i]),
+            (delay / sounds.length) * i * 1000
+          );
+        }
+      };
+      playWord();
+    }
+  }, [data, level, started, playedWords, delay, total]);
 
   return (
     <Container maxWidth="sm" xs={{ mt: 5 }}>
@@ -117,7 +129,7 @@ function App() {
       </Grid>
       <Stack spacing={2} direction="row">
         <Button
-          onClick={() => startInterval(data)}
+          onClick={() => setStarted(true)}
           variant="contained"
           disabled={started}
         >
@@ -125,9 +137,28 @@ function App() {
         </Button>
         <Button variant="outlined">Outlined</Button>
       </Stack>
-      <Typography variant="h2" mt={2}>
+      <Typography
+        variant="h2"
+        mt={2}
+        sx={{
+          fontSize: "7em",
+          color: "transparent",
+          textShadow: "0 0 25px #000",
+        }}
+      >
         {word?.word || ""}
       </Typography>
+
+      <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+        {[word, ...playedWords.reverse()].filter(Boolean).map((w) => (
+          <ListItem key={w.word}>
+            <ListItemIcon>
+              <CampaignIcon />
+            </ListItemIcon>
+            <ListItemText id="switch-list-label-wifi" primary={w.word} />
+          </ListItem>
+        ))}
+      </List>
     </Container>
   );
 }
